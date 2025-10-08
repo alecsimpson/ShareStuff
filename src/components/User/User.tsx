@@ -1,45 +1,30 @@
-import {useMemo, useState} from "react";
-import ItemList, {type ItemData} from "../ItemList/ItemList.tsx";
-import {itemListMock2} from "../../assets/mocks/itemList.mock.ts";
-
+import { useState } from "react";
+import ItemList from "../ItemList/ItemList.tsx";
+import { useItems } from "../../contexts/ItemsContext";
 
 export type User = {
-    userId: string;
-    displayName: string;
-    itemList: ItemData[]
-}
+  userId: string;
+  displayName: string;
+};
 
+export default function User() {
+  const [userData] = useState<User>(getUserData());
+  const { userItems } = useItems();
 
+  function getUserData(): User {
+    return {
+      userId: "user_1",
+      displayName: "alec",
+    };
+  }
 
-
-export default function User(){
-
-    const [userData, setUserData] = useState<User>(getUserData())
-
-    const totalSpent = useMemo(() => {
-        return userData.itemList.reduce((sum, item) =>  sum + (item.itemPrice || 0), 0) },
-        [userData]
-    )
-
-
-    function getUserData(): User {
-        return {
-            userId: "asd",
-            displayName: "alec",
-            itemList: itemListMock2.itemList
-        }
-    }
-
-    return (
-        <>
-            <div>
-                <h3>{userData.displayName}</h3>
-                <hr/>
-                <p>{`Total spent: $${totalSpent}`}</p>
-                <hr/>
-                <ItemList itemListData={userData.itemList}/>
-                <hr/>
-            </div>
-        </>
-    )
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6 space-y-6">
+      <header className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">{userData.displayName}</h1>
+        <p className="text-sm text-gray-500">Your items: {userItems.size}</p>
+      </header>
+      <ItemList itemListId="userId" showAddButton={false} />
+    </div>
+  );
 }

@@ -1,16 +1,33 @@
-import { useState } from 'react'
+import { RouterProvider } from "react-router/dom";
+import { createBrowserRouter } from "react-router";
+import Home from "./components/Home/Home.tsx";
+import User from "./components/User/User.tsx";
+import "./App.css";
+import Base from "./components/Base/Base.tsx";
 
-import './App.css'
-import ItemList from "./components/ItemList/ItemList.tsx";
-import {itemListMock} from "./assets/mocks/itemList.mock.ts";
+const routes = createBrowserRouter([
+	{
+		path: "/",
+		Component: Base,
+		children: [
+			{
+				path: "/",
+				Component: Home,
+			},
+			{
+				path: "user",
+				Component: User,
+			},
+		]
+	}
+]);
 
 function App() {
-
   return (
     <>
-     <ItemList itemListData={itemListMock.itemList}/>
+	    <RouterProvider router={routes} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
