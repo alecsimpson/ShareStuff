@@ -9,6 +9,7 @@ type ItemProps = {
   showAddButton?: boolean;
 };
 
+
 export default function Item({ item, showAddButton }: ItemProps) {
   const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, currentUserId } = useItems();
 
