@@ -1,26 +1,31 @@
 import { useItems } from '../../contexts/ItemsContext';
 import Item from "../Item/Item.tsx";
+import {useMemo} from "react";
 
 type ItemListProps = {
 	itemListId: string;
-	showAddButton?: boolean; // true for home, false for user page
 };
 
-export default function ItemList({ itemListId, showAddButton = false }: ItemListProps) {
+export default function ItemList({ itemListId }: ItemListProps) {
 	const { allItems, userItems } = useItems();
 
-	// Filter items based on context
-	const displayItems = showAddButton
-		? allItems // Show all items on home page
-		: allItems.filter(item => userItems.has(item.id)); // Show only user's items on user page
+	const allMode = useMemo(() => {return itemListId === 'all'}, [itemListId]);
+
+	const displayItems = allMode
+		? allItems
+		: allItems.filter(item => userItems.has(item.id));
+
+	const totalCost = displayItems.reduce(
+		(total, curr) => {total += curr.price || 0; return total;}, 0);
 
 	return (
 		<div className="space-y-4">
+			<p>Total: {totalCost}</p>
 			{displayItems.map(item => (
 				<Item
 					key={item.id}
 					item={item}
-					showAddButton={showAddButton}
+					showAddButton={allMode}
 				/>
 			))}
 		</div>
