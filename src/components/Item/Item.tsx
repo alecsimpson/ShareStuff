@@ -1,18 +1,16 @@
-import { useItems } from '../../contexts/ItemsContext';
-import { ItemType } from "../../models/ItemType.ts";
-import {useState} from "react";
+import {useItems} from '../../contexts/ItemsContext';
+import {ItemType} from "../../models/ItemType.ts";
 import ItemForm from "./ItemForm/ItemForm.tsx";
 
 
 type ItemProps = {
   item: ItemType;
-  showAddButton?: boolean;
 	editMode?: boolean;
 	setEditMode?: (mode: boolean) => void;
 };
 
 
-export default function Item({ item, showAddButton = false, editMode = false, setEditMode = () => {}}: ItemProps) {
+export default function Item({ item,  editMode = false, setEditMode = () => {}}: ItemProps) {
 
 
 	const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, currentUserId, deleteItem, createItem } = useItems();
@@ -21,12 +19,12 @@ export default function Item({ item, showAddButton = false, editMode = false, se
 	const created_atLabel = item.created_at ? new Date(item.created_at).toLocaleString() : '';
 	const canEdit = item.created_by === currentUserId;
 
-	const saveItem = (item: ItemType) => {
+	const saveItem = async (item: ItemType) => {
 		if(item.id === -1) {
 			const { id, ...data } = item
-			createItem(data)
+			await createItem(data)
 		} else {
-			updateItem(item)
+			await updateItem(item)
 		}
 		setEditMode(false);
 	}
@@ -123,38 +121,26 @@ export default function Item({ item, showAddButton = false, editMode = false, se
 								</div>
 							</div>
 
-  					{/* Actions */}
-						<div className="self-center flex items-center gap-2">
-							{showAddButton ? (
-								<button
-									onClick={() => (isAdded ? removeItemFromUser(item.id) : addItemToUser(item.id))}
-									className={`px-3 sm:px-4 py-2 rounded-md text-white text-sm font-medium shadow ${
-										isAdded
-											? 'bg-red-500 hover:bg-red-600'
-											: 'bg-blue-500 hover:bg-blue-600'
-										}`}
-								>
-									{isAdded ? 'Remove from your list' : 'Add to your list'}
-								</button>
-							) : (
-								<button
-									onClick={() => removeItemFromUser(item.id)}
-									className="px-3 sm:px-4 py-2 rounded-md bg-red-500 text-white text-sm font-medium shadow hover:bg-red-600"
-								>
-									Remove
-								</button>
-							)}
-
-
-							{canEdit && (
-								<button
-									onClick={() => setEditMode(true)}
-									className="px-3 sm:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm font-medium shadow hover:bg-gray-300"
-								>
-									Edit
-								</button>
-							)}
-						</div>
+							<div className="self-center flex items-center gap-2">
+								{canEdit && (
+									<button
+										onClick={() => setEditMode(true)}
+										className="px-3 sm:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm font-medium shadow hover:bg-gray-300"
+									>
+										Edit
+									</button>
+								)}
+									<button
+										onClick={() => (isAdded ? removeItemFromUser(item.id) : addItemToUser(item.id))}
+										className={`px-3 sm:px-4 py-2 rounded-md text-white text-sm font-medium shadow ${
+											isAdded
+												? 'bg-red-500 hover:bg-red-600'
+												: 'bg-blue-500 hover:bg-blue-600'
+											}`}
+									>
+										{isAdded ? 'Remove from your list' : 'Add to your list'}
+									</button>
+							</div>
 						</div>
 					</>
 			}
