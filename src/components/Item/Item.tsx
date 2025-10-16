@@ -7,49 +7,60 @@ import ItemForm from "./ItemForm/ItemForm.tsx";
 type ItemProps = {
   item: ItemType;
   showAddButton?: boolean;
+	editMode?: boolean;
+	setEditMode?: (mode: boolean) => void;
 };
 
 
-export default function Item({ item, showAddButton }: ItemProps) {
-  const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, currentUserId } = useItems();
+export default function Item({ item, showAddButton = false, editMode = false, setEditMode = () => {}}: ItemProps) {
 
-	const [editing, setEditing] = useState<boolean>(false);
+
+	const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, currentUserId, deleteItem, createItem } = useItems();
 
 	const isAdded = isItemInUserList(item.id);
-	const addedAtLabel = item.addedAt ? new Date(item.addedAt).toLocaleString() : '';
-	const canEdit = item.addedBy === currentUserId;
+	const created_atLabel = item.created_at ? new Date(item.created_at).toLocaleString() : '';
+	const canEdit = item.created_by === currentUserId;
+
+	const saveItem = (item: ItemType) => {
+		if(item.id === -1) {
+			const { id, ...data } = item
+			createItem(data)
+		} else {
+			updateItem(item)
+		}
+		setEditMode(false);
+	}
 
 
   return (
 		<>
 			{
-				editing ?
+				editMode ?
 					<>
 						<ItemForm
 							item={item}
-							onCancel={() => setEditing(false)}
-							onSave={(updated) => { updateItem(updated); setEditing(false); }}
+							onCancel={() => setEditMode(false)}
+							onSave={(updated: ItemType) => { saveItem(updated); }}
+							onDelete={(id: number) => (deleteItem(id))}
 						/>
 					</>
 				:
 					<>
 						<div className={`bg-white border rounded-xl p-4 sm:p-5 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow ${item.urgent ? 'ring-1 ring-red-200' : ''} ${item.bought ? 'ring-1 ring-green-200' : ''}`}>
-							{/* Thumbnail */}
-							{item.image && (
+							<p className="text-xs text-gray-500">id:{item.id}</p>
+							{item.image_url && (
 								<img
-									src={item.image}
+									src={item.image_url}
 									alt={item.name}
 									className="w-20 h-20 sm:w-24 sm:h-24 rounded-md object-cover border"
 								/>
 							)}
 
-							{/* Main content */}
 							<div className="flex-1 min-w-0">
 								<div className="flex flex-wrap items-center gap-2">
 									<h3 className={`font-semibold text-base sm:text-lg ${item.bought ? 'line-through text-gray-500' : 'text-gray-900'}`}>
 										{item.name}
 									</h3>
-									{/* Clickable status chips */}
 									<span
 										role="button"
 										tabIndex={0}
@@ -107,8 +118,8 @@ export default function Item({ item, showAddButton }: ItemProps) {
 
 								<div className="mt-2 text-xs text-gray-500">
 									<span>Added by </span>
-									<span className="font-medium text-gray-700">{item.addedBy}</span>
-									{addedAtLabel && <span> • {addedAtLabel}</span>}
+									<span className="font-medium text-gray-700">{item.created_by}</span>
+									{created_atLabel && <span> • {created_atLabel}</span>}
 								</div>
 							</div>
 
@@ -123,7 +134,7 @@ export default function Item({ item, showAddButton }: ItemProps) {
 											: 'bg-blue-500 hover:bg-blue-600'
 										}`}
 								>
-									{isAdded ? 'Remove' : 'Add'}
+									{isAdded ? 'Remove from your list' : 'Add to your list'}
 								</button>
 							) : (
 								<button
@@ -137,7 +148,7 @@ export default function Item({ item, showAddButton }: ItemProps) {
 
 							{canEdit && (
 								<button
-									onClick={() => setEditing(true)}
+									onClick={() => setEditMode(true)}
 									className="px-3 sm:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm font-medium shadow hover:bg-gray-300"
 								>
 									Edit
