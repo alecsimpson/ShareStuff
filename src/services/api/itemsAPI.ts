@@ -1,6 +1,5 @@
-
-import { createClient } from '@supabase/supabase-js';
-import { ItemType } from "../../models/ItemType";
+import {createClient, SupabaseClient} from '@supabase/supabase-js';
+import {ItemType} from "../../models/ItemType";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PUBLIC_PROJECT_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -9,14 +8,30 @@ if (!supabaseUrl || !supabaseAnonKey) {
 	throw new Error('Missing Supabase environment variables');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let supabaseClient: SupabaseClient | null = null;
+
+function getSupabase() {
+	if (!supabaseClient) {
+		if (!supabaseUrl || !supabaseAnonKey) {
+			// Log instead of throwing at module import time
+			console.error('Missing Supabase environment variables. Set VITE_SUPABASE_PUBLIC_PROJECT_URL and VITE_SUPABASE_ANON_KEY at build time.');
+			return null;
+		}
+		supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+	}
+
+	return supabaseClient;
+}
 
 export const itemsAPI = {
 	async getAll() {
-		const { data, error } = await supabase
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
+		const {data, error} = await supabase
 			.from('Item')
 			.select('*')
-			.order('created_at', { ascending: false });
+			.order('created_at', {ascending: false});
 
 		if (error) throw error;
 		console.debug(data);
@@ -24,6 +39,9 @@ export const itemsAPI = {
 	},
 
 	async getById(id: number) {
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { data, error } = await supabase
 			.from('Item')
 			.select('*')
@@ -35,7 +53,9 @@ export const itemsAPI = {
 	},
 
 	async create(item: Omit<ItemType, 'id' | 'created_at'>) {
-		console.debug('item',item);
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { data, error } = await supabase
 			.from('Item')
 			.insert(item)
@@ -48,6 +68,9 @@ export const itemsAPI = {
 
 	// Update item
 	async update(id: number, updates: Partial<ItemType>) {
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { data, error } = await supabase
 			.from('Item')
 			.update(updates)
@@ -60,6 +83,9 @@ export const itemsAPI = {
 	},
 
 	async delete(id: number) {
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { error } = await supabase
 			.from('Item')
 			.delete()
@@ -69,6 +95,9 @@ export const itemsAPI = {
 	},
 
 	async getUrgent() {
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { data, error } = await supabase
 			.from('Item')
 			.select('*')
@@ -80,6 +109,9 @@ export const itemsAPI = {
 	},
 
 	async getUnbought() {
+		const supabase = getSupabase();
+		if (!supabase) throw new Error('Supabase not initialized');
+
 		const { data, error } = await supabase
 			.from('Item')
 			.select('*')
