@@ -27,12 +27,12 @@ export default function ItemList({ itemListId }: ItemListProps) {
 
 	return (
 		<div className="space-y-4">
-			<p>Total: {totalCost}</p>
+			<p className="text-sm sm:text-base">Total: {totalCost}</p>
 			{
 				!editingItem && (
 					<button
 						type="button"
-						className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+						className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
 						onClick={onCreate}
 					>
 						Create
