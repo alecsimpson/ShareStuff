@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { ItemType } from "../../models/ItemType";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_PUBLIC_PROJECT_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
@@ -19,6 +19,7 @@ export const itemsAPI = {
 			.order('created_at', { ascending: false });
 
 		if (error) throw error;
+		console.debug(data);
 		return data as ItemType[];
 	},
 
@@ -34,6 +35,7 @@ export const itemsAPI = {
 	},
 
 	async create(item: Omit<ItemType, 'id' | 'created_at'>) {
+		console.debug('item',item);
 		const { data, error } = await supabase
 			.from('Item')
 			.insert(item)

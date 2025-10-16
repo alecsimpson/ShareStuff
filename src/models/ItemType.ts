@@ -1,15 +1,15 @@
 
 export type ItemType = {
-	id: string;
+	id: number;
 	name: string;
-	addedAt: Date;
-	addedBy: string;
+	created_at: Date;
+	created_by: string;
 	urgent: boolean;
 	bought: boolean;
 	price?: number;
 	description?: string;
 	link?: string;
 	amount?: number;
-	image?: string;
+	image_url?: string;
 	store?: string;
 };

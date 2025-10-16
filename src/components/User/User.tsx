@@ -3,7 +3,7 @@ import ItemList from "../ItemList/ItemList.tsx";
 import { useItems } from "../../contexts/ItemsContext";
 
 export type User = {
-  userId: string;
+  userid: number;
   displayName: string;
 };
 
