@@ -1,5 +1,4 @@
 import {v4 as uuid} from "uuid";
-import ItemList, {type ItemData} from "../../components/ItemList/ItemList.tsx";
 
 
 export const itemListMock = {

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import {useState} from "react";
 import ItemList from "../ItemList/ItemList.tsx";
-import { useItems } from "../../contexts/ItemsContext";
+import {useItems} from "../../contexts/ItemsContext";
 
 export type User = {
-  userid: number;
+  userId: number;
   displayName: string;
 };
 
@@ -13,7 +13,7 @@ export default function User() {
 
   function getUserData(): User {
     return {
-      userId: "user_1",
+      userId: 0,
       displayName: "alec",
     };
   }
@@ -24,7 +24,7 @@ export default function User() {
         <h1 className="text-2xl font-semibold tracking-tight">{userData.displayName}</h1>
         <p className="text-sm text-gray-500">Your items: {userItems.size}</p>
       </header>
-      <ItemList itemListId="userId" showAddButton={false} />
+      <ItemList itemListId={0} />
     </div>
   );
 }
