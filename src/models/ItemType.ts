@@ -11,4 +11,5 @@ export type ItemType = {
 	link?: string;
 	amount?: number;
 	image?: string;
+	store?: string;
 };

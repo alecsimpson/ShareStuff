@@ -7,7 +7,7 @@ export default function Home() {
 				<h1 className="text-2xl font-semibold tracking-tight">Home</h1>
 				<p className="text-sm text-gray-500">Browse and add items to your collection.</p>
 			</header>
-			<ItemList itemListId="0" showAddButton={true} />
+			<ItemList itemListId="all" />
 		</div>
 	);
 }

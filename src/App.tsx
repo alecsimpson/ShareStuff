@@ -1,31 +1,13 @@
-import { RouterProvider } from "react-router/dom";
-import { createBrowserRouter } from "react-router";
-import Home from "./components/Home/Home.tsx";
-import User from "./components/User/User.tsx";
 import "./App.css";
-import Base from "./components/Base/Base.tsx";
+import NavBar from "./components/NavBar/NavBar.tsx";
+import {Outlet} from "react-router";
 
-const routes = createBrowserRouter([
-	{
-		path: "/",
-		Component: Base,
-		children: [
-			{
-				path: "/",
-				Component: Home,
-			},
-			{
-				path: "user",
-				Component: User,
-			},
-		]
-	}
-]);
 
 function App() {
   return (
     <>
-	    <RouterProvider router={routes} />
+	    <NavBar/>
+	    <Outlet/>
     </>
   );
 }
