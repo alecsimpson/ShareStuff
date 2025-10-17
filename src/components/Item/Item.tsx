@@ -139,7 +139,7 @@ export default function Item({ item,  editMode = false, setEditMode = () => {}}:
 											: 'bg-blue-500 hover:bg-blue-600'
 									}`}
 								>
-									{isAdded ? 'Remove from your list' : 'Add to your list'}
+									{isAdded ? 'Remove' : 'Add'}
 								</button>
 							</div>
 						</div>

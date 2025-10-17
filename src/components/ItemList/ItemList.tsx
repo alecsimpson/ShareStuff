@@ -27,7 +27,7 @@ export default function ItemList({ itemListId }: ItemListProps) {
 
 	return (
 		<div className="space-y-4">
-			<p className="text-sm sm:text-base">Total: {totalCost}</p>
+			<p className="text-sm sm:text-base">Total: ${totalCost}</p>
 			{
 				!editingItem && (
 					<button

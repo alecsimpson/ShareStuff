@@ -7,19 +7,34 @@ import {RouterProvider} from "react-router/dom";
 import {createBrowserRouter} from "react-router";
 import Home from "./components/Home/Home.tsx";
 import User from "./components/User/User.tsx";
+import Login from "./components/Login/Login.tsx";
+import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute.tsx";
+import {AuthProvider} from "./contexts/AuthContext.tsx";
 
 const routes = createBrowserRouter([
+	{
+		path: "/login",
+		Component: Login,
+	},
 	{
 		path: "/",
 		Component: App,
 		children: [
 			{
 				path: "/",
-				Component: Home,
+				element: (
+					<ProtectedRoute>
+						<Home/>
+					</ProtectedRoute>
+				)
 			},
 			{
 				path: "user",
-				Component: User,
+				element: (
+					<ProtectedRoute>
+						<User />
+					</ProtectedRoute>
+				),
 			},
 		]
 	}
@@ -27,8 +42,10 @@ const routes = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-	    <ItemsProvider>
-		    <RouterProvider router={routes}/>
-	    </ItemsProvider>
+	    <AuthProvider>
+		    <ItemsProvider>
+			    <RouterProvider router={routes}/>
+		    </ItemsProvider>
+	    </AuthProvider>
     </StrictMode>
 )
