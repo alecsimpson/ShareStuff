@@ -1,4 +1,4 @@
-import {createContext, useContext, useState, ReactNode, useEffect} from 'react';
+import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {ItemType} from '../models/ItemType';
 import {itemsAPI} from '../services/api/itemsAPI.ts'
 
@@ -10,7 +10,6 @@ type ItemsContextType = {
 	isItemInUserList: (itemId: number) => boolean;
 	updateItem: (updated: ItemType) => void;
 	deleteItem: (itemId: number) => void;
-	currentUserId: string;
 	loading: boolean;
 	refreshItems: () => Promise<void>;
 	createItem: (item: Omit<ItemType, 'id' | 'created_at'>) => Promise<void>;
@@ -74,14 +73,12 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 		void refreshItems();
 	}
 
-	const currentUserId = 'user_1';
 
 	return (
 		<ItemsContext.Provider value={{
 			allItems,
 			userItems,
 			loading,
-			currentUserId,
 			addItemToUser,
 			removeItemFromUser,
 			isItemInUserList,
