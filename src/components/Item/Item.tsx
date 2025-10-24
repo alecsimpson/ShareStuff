@@ -1,6 +1,7 @@
 import {useItems} from '../../contexts/ItemsContext';
 import {ItemType} from "../../models/ItemType.ts";
 import ItemForm from "./ItemForm/ItemForm.tsx";
+// import {useAuth} from "../../contexts/AuthContext.tsx";
 
 
 type ItemProps = {
@@ -13,11 +14,13 @@ type ItemProps = {
 export default function Item({ item,  editMode = false, setEditMode = () => {}}: ItemProps) {
 
 
-	const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, currentUserId, deleteItem, createItem } = useItems();
+	const { addItemToUser, removeItemFromUser, isItemInUserList, updateItem, deleteItem, createItem } = useItems();
+	// const { user } = useAuth();
 
 	const isAdded = isItemInUserList(item.id);
 	const created_atLabel = item.created_at ? new Date(item.created_at).toLocaleString() : '';
-	const canEdit = item.created_by === currentUserId;
+	// const canEdit = item.created_by === (user?.id || user?.role === 'admin');
+	const canEdit = true
 
 	const saveItem = async (item: ItemType) => {
 		if(item.id === -1) {

@@ -23,9 +23,7 @@ const routes = createBrowserRouter([
 			{
 				path: "/",
 				element: (
-					<ProtectedRoute>
-						<Home/>
-					</ProtectedRoute>
+					<Home/>
 				)
 			},
 			{
