@@ -1,6 +1,7 @@
 import {useItems} from '../../contexts/ItemsContext';
 import Item from "../Item/Item.tsx";
 import {useMemo, useState} from "react";
+import {useAuth} from "../../contexts/AuthContext.tsx";
 
 type ItemListProps = {
 	itemListId: number;
@@ -9,7 +10,8 @@ type ItemListProps = {
 
 export default function ItemList({ itemListId }: ItemListProps) {
 
-	const { allItems, userItems, currentUserId } = useItems();
+	const { allItems, userItems} = useItems();
+	const { user } = useAuth();
 	const [editingItem, setEditingItem] = useState<number | null>(null);
 	const allMode = useMemo(() => {return itemListId === 0}, [itemListId]);
 	const displayItems = allMode
@@ -45,7 +47,7 @@ export default function ItemList({ itemListId }: ItemListProps) {
 						id: -1, // Temporary ID
 						name: '',
 						created_at: new Date(),
-						created_by: currentUserId,
+						created_by: user ? user.id : '0',
 						urgent: false,
 						bought: false,
 						price: undefined,
