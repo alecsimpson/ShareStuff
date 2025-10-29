@@ -4,7 +4,7 @@ import {v4 as uuid} from "uuid";
 export const itemListMock = {
     itemList: [
         {
-            id: uuid(),
+            uuid: uuid(),
             itemName: 'asd1',
             itemPrice: 123,
             urgent: false,
@@ -12,7 +12,7 @@ export const itemListMock = {
             dateAdded: new Date(),
         },
         {
-            id: uuid(),
+            uuid: uuid(),
             itemName: 'asd2',
             itemPrice: 12334,
             urgent: false,
@@ -25,7 +25,7 @@ export const itemListMock = {
 export const itemListMock2 = {
     itemList: [
         {
-            id: uuid(),
+            uuid: uuid(),
             itemName: 'user asd1',
             itemPrice: 1231231,
             urgent: false,
@@ -33,7 +33,7 @@ export const itemListMock2 = {
             dateAdded: new Date(),
         },
         {
-            id: uuid(),
+            uuid: uuid(),
             itemName: 'user asd2',
             itemPrice: 1342334,
             urgent: false,
