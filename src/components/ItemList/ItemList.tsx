@@ -10,9 +10,9 @@ type ItemListProps = {
 
 export default function ItemList({ itemListId }: ItemListProps) {
 
-	const { allItems, userItems} = useItems();
+	const { allItems, userItems } = useItems();
 	const { user } = useAuth();
-	const [editingItem, setEditingItem] = useState<number | null>(null);
+	const [editingItem, setEditingItem] = useState<string | null>(null);
 	const allMode = useMemo(() => {return itemListId === 0}, [itemListId]);
 	const displayItems = allMode
 		? allItems
@@ -24,7 +24,7 @@ export default function ItemList({ itemListId }: ItemListProps) {
 
 
 	const onCreate = () => {
-		setEditingItem(-1);
+		setEditingItem('new');
 	}
 
 	return (
@@ -41,10 +41,10 @@ export default function ItemList({ itemListId }: ItemListProps) {
 					</button>
 				)
 			}
-			{editingItem === -1 &&
+			{editingItem === 'new' &&
 				<Item
 					item={{
-						id: -1, // Temporary ID
+						id: '',
 						name: '',
 						created_at: new Date(),
 						created_by: user ? user.id : '0',

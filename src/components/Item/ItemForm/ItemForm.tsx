@@ -1,11 +1,11 @@
 import {useState} from 'react';
-import {ItemType} from '../../../models/ItemType';
+import {ItemT} from '../../../models/ItemT';
 
 type ItemFormProps = {
-	item: ItemType;
+	item: ItemT;
 	onCancel: () => void;
-	onSave: (updated: ItemType) => void;
-	onDelete: (id: number) => void;
+	onSave: (updated: ItemT) => void;
+	onDelete: (id: string) => void;
 };
 
 export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormProps) {
@@ -20,7 +20,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		const updated: ItemType = {
+		const updated: ItemT = {
 			...item,
 			name: name.trim() || item.name,
 			description: description.trim() || undefined,
@@ -132,7 +132,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 					Save
 				</button>
 				{
-					item.id !== -1 &&
+					item.id !== 'new' &&
 						(
 							<button
 								type="button"

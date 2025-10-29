@@ -1,11 +1,10 @@
 import {useItems} from '../../contexts/ItemsContext';
-import {ItemType} from "../../models/ItemType.ts";
+import {ItemT} from "../../models/ItemT.ts";
 import ItemForm from "./ItemForm/ItemForm.tsx";
-// import {useAuth} from "../../contexts/AuthContext.tsx";
 
 
 type ItemProps = {
-  item: ItemType;
+  item: ItemT;
 	editMode?: boolean;
 	setEditMode?: (mode: boolean) => void;
 };
@@ -22,12 +21,12 @@ export default function Item({ item,  editMode = false, setEditMode = () => {}}:
 	// const canEdit = item.created_by === (user?.id || user?.role === 'admin');
 	const canEdit = true
 
-	const saveItem = async (item: ItemType) => {
-		if(item.id === -1) {
+	const saveItem = async (item: ItemT) => {
+		if(item.id === 'new') {
 			const { id, ...data } = item
 			await createItem(data)
 		} else {
-			await updateItem(item)
+			updateItem(item)
 		}
 		setEditMode(false);
 	}
@@ -41,8 +40,8 @@ export default function Item({ item,  editMode = false, setEditMode = () => {}}:
 						<ItemForm
 							item={item}
 							onCancel={() => setEditMode(false)}
-							onSave={(updated: ItemType) => { saveItem(updated); }}
-							onDelete={(id: number) => (deleteItem(id))}
+							onSave={(updated: ItemT) => { saveItem(updated); }}
+							onDelete={(id: string) => (deleteItem(id))}
 						/>
 					</>
 				:

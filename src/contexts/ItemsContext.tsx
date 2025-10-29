@@ -1,26 +1,26 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {ItemType} from '../models/ItemType';
+import {ItemT} from '../models/ItemT.ts';
 import {itemsAPI} from '../services/api/itemsAPI.ts'
 
 type ItemsContextType = {
-	allItems: ItemType[];
-	userItems: Set<number>;
-	addItemToUser: (itemId: number) => void;
-	removeItemFromUser: (itemId: number) => void;
-	isItemInUserList: (itemId: number) => boolean;
-	updateItem: (updated: ItemType) => void;
-	deleteItem: (itemId: number) => void;
+	allItems: ItemT[];
+	userItems: Set<string>;
+	addItemToUser: (itemId: string) => void;
+	removeItemFromUser: (itemId: string) => void;
+	isItemInUserList: (itemId: string) => boolean;
+	updateItem: (updated: ItemT) => void;
+	deleteItem: (itemId: string) => void;
 	loading: boolean;
 	refreshItems: () => Promise<void>;
-	createItem: (item: Omit<ItemType, 'id' | 'created_at'>) => Promise<void>;
+	createItem: (item: Omit<ItemT, 'id' | 'created_at'>) => Promise<void>;
 };
 
 const ItemsContext = createContext<ItemsContextType | undefined>(undefined);
 
 export function ItemsProvider({children}: { children: ReactNode }) {
 
-	const [allItems, setAllItems] = useState<ItemType[]>([]);
-	const [userItems, setUserItems] = useState<Set<number>>(new Set());
+	const [allItems, setAllItems] = useState<ItemT[]>([]);
+	const [userItems, setUserItems] = useState<Set<string>>(new Set());
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -39,14 +39,14 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 		}
 	};
 
-	const addItemToUser = (itemId: number) => {
+	const addItemToUser = (itemId: string) => {
 		// Ensure the user list is always a subset of allItems
 		const existsInAll = allItems.some(item => item.id === itemId);
 		if (!existsInAll) return;
 		setUserItems(prev => new Set([...prev, itemId]));
 	};
 
-	const removeItemFromUser = (itemId: number) => {
+	const removeItemFromUser = (itemId: string) => {
 		setUserItems(prev => {
 			const newSet = new Set(prev);
 			newSet.delete(itemId);
@@ -54,21 +54,21 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 		});
 	};
 
-	const isItemInUserList = (itemId: number) => {
+	const isItemInUserList = (itemId: string) => {
 		return userItems.has(itemId);
 	};
 
-	const updateItem = async (updated: ItemType) => {
+	const updateItem = async (updated: ItemT) => {
 		await itemsAPI.update(updated.id, updated);
 		void refreshItems();
 	};
 
-	const deleteItem = async (itemId: number) => {
+	const deleteItem = async (itemId: string) => {
 		await itemsAPI.delete(itemId);
 		void refreshItems();
 	}
 
-	const createItem = async (item: ItemType | Omit<ItemType, 'id' | 'created_at'>) => {
+	const createItem = async (item: ItemT | Omit<ItemT, 'id' | 'created_at'>) => {
 		await itemsAPI.create(item);
 		void refreshItems();
 	}

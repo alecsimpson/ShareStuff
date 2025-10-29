@@ -1,4 +1,4 @@
-import {ItemType} from "../../models/ItemType";
+import {ItemT} from "../../models/ItemT";
 import {getSupabase} from "../supabaseClient.ts";
 
 
@@ -8,13 +8,13 @@ export const itemsAPI = {
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const {data, error} = await supabase
-			.from('Item')
+			.from('items')
 			.select('*')
 			.order('created_at', {ascending: false});
 
 		if (error) throw error;
 		console.debug(data);
-		return data as ItemType[];
+		return data as ItemT[];
 	},
 
 	async getById(id: number) {
@@ -22,16 +22,16 @@ export const itemsAPI = {
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { data, error } = await supabase
-			.from('Item')
+			.from('items')
 			.select('*')
 			.eq('id', id)
 			.single();
 
 		if (error) throw error;
-		return data as ItemType;
+		return data as ItemT;
 	},
 
-	async create(item: Omit<ItemType, 'id' | 'created_at'>) {
+	async create(item: Omit<ItemT, 'id' | 'created_at'>) {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
@@ -42,11 +42,11 @@ export const itemsAPI = {
 			.single();
 
 		if (error) throw error;
-		return data as ItemType;
+		return data as ItemT;
 	},
 
 	// Update item
-	async update(id: number, updates: Partial<ItemType>) {
+	async update(id: string, updates: Partial<ItemT>) {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
@@ -58,10 +58,10 @@ export const itemsAPI = {
 			.single();
 
 		if (error) throw error;
-		return data as ItemType;
+		return data as ItemT;
 	},
 
-	async delete(id: number) {
+	async delete(id: string) {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
@@ -84,7 +84,7 @@ export const itemsAPI = {
 			.order('created_at', { ascending: false });
 
 		if (error) throw error;
-		return data as ItemType[];
+		return data as ItemT[];
 	},
 
 	async getUnbought() {
@@ -98,6 +98,6 @@ export const itemsAPI = {
 			.order('created_at', { ascending: false });
 
 		if (error) throw error;
-		return data as ItemType[];
+		return data as ItemT[];
 	}
 };
