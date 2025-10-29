@@ -1,6 +1,8 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {ItemT} from '../models/ItemT.ts';
 import {itemsAPI} from '../services/api/itemsAPI.ts'
+import {listsAPI} from "../services/api/listsAPI.ts";
+import {ListT} from "../models/ListT.ts";
 
 type ItemsContextType = {
 	allItems: ItemT[];
@@ -27,17 +29,37 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 		void refreshItems();
 	}, []);
 
+
+	const sortItems = (items: ItemT[], list: ListT): ItemT[] => {
+		const itemsMap = new Map(items.map(item => [item.id, item]));
+		return list.items
+			.map(itemId => itemsMap.get(itemId))
+			.filter(item => item !== undefined) as ItemT[];
+	}
+
 	const refreshItems = async () => {
 		try {
 			setLoading(true);
-			const data = await itemsAPI.getAll();
-			setAllItems(data);
+			const allItems: ItemT[] = await itemsAPI.getAll();
+			let sharedList: ListT = await listsAPI.getHomePageList();
+
+
+			if(sharedList.items.length === 0) {
+				sharedList = await listsAPI.updateList({
+					...sharedList,
+					items: allItems.map(item => item.id)
+				})
+			}
+
+			setAllItems(sortItems(allItems, sharedList));
+
 		} catch (e) {
 			console.error('Error fetching items:', e);
 		} finally {
 			setLoading(false);
 		}
 	};
+
 
 	const addItemToUser = (itemId: string) => {
 		// Ensure the user list is always a subset of allItems

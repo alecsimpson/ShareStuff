@@ -4,23 +4,22 @@ import {useMemo, useState} from "react";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 
 type ItemListProps = {
-	itemListId: number;
+	itemListKey?: string;
 };
 
 
-export default function ItemList({ itemListId }: ItemListProps) {
+export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 
 	const { allItems, userItems } = useItems();
 	const { user } = useAuth();
 	const [editingItem, setEditingItem] = useState<string | null>(null);
-	const allMode = useMemo(() => {return itemListId === 0}, [itemListId]);
+	const allMode = useMemo(() => {return itemListKey === 'shared'}, [itemListKey]);
 	const displayItems = allMode
 		? allItems
 		: allItems.filter(item => userItems.has(item.id));
 
 	const totalCost = displayItems.reduce(
 		(total, curr) => {total += curr.price || 0; return total;}, 0);
-
 
 
 	const onCreate = () => {
