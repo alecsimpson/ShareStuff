@@ -3,7 +3,7 @@ import {getSupabase} from "../supabaseClient.ts";
 
 
 export const itemsAPI = {
-	async getAll() {
+	async getAll(): Promise<ItemT[]> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
@@ -13,11 +13,10 @@ export const itemsAPI = {
 			.order('created_at', {ascending: false});
 
 		if (error) throw error;
-		console.debug(data);
 		return data as ItemT[];
 	},
 
-	async getById(id: number) {
+	async getById(id: number): Promise<ItemT> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
@@ -31,12 +30,12 @@ export const itemsAPI = {
 		return data as ItemT;
 	},
 
-	async create(item: Omit<ItemT, 'id' | 'created_at'>) {
+	async create(item: Omit<ItemT, 'id' | 'created_at'>): Promise<ItemT> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { data, error } = await supabase
-			.from('Item')
+			.from('items')
 			.insert(item)
 			.select()
 			.single();
@@ -46,12 +45,12 @@ export const itemsAPI = {
 	},
 
 	// Update item
-	async update(id: string, updates: Partial<ItemT>) {
+	async update(id: string, updates: Partial<ItemT>): Promise<ItemT> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { data, error } = await supabase
-			.from('Item')
+			.from('items')
 			.update(updates)
 			.eq('id', id)
 			.select()
@@ -61,24 +60,24 @@ export const itemsAPI = {
 		return data as ItemT;
 	},
 
-	async delete(id: string) {
+	async delete(id: string): Promise<void> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { error } = await supabase
-			.from('Item')
+			.from('items')
 			.delete()
 			.eq('id', id);
 
 		if (error) throw error;
 	},
 
-	async getUrgent() {
+	async getUrgent(): Promise<ItemT[]> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { data, error } = await supabase
-			.from('Item')
+			.from('items')
 			.select('*')
 			.eq('urgent', true)
 			.order('created_at', { ascending: false });
@@ -87,12 +86,12 @@ export const itemsAPI = {
 		return data as ItemT[];
 	},
 
-	async getUnbought() {
+	async getUnbought(): Promise<ItemT[]> {
 		const supabase = getSupabase();
 		if (!supabase) throw new Error('Supabase not initialized');
 
 		const { data, error } = await supabase
-			.from('Item')
+			.from('items')
 			.select('*')
 			.eq('bought', false)
 			.order('created_at', { ascending: false });
