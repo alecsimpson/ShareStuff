@@ -9,7 +9,7 @@ export default function User() {
         <h1 className="text-2xl font-semibold tracking-tight">{}</h1>
         <p className="text-sm text-gray-500">Your items: {}</p>
       </header>
-      <ItemList itemListId={0} />
+      <ItemList />
     </div>
   );
 }
