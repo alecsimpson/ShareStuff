@@ -1,7 +1,10 @@
 import {useItems} from '../../contexts/ItemsContext';
 import Item from "../Item/Item.tsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useAuth} from "../../contexts/AuthContext.tsx";
+import DraggableList from "../shared/DraggableList.tsx";
+import DraggableCard from "../shared/DraggableCard.tsx";
+import {ItemT} from "../../models/ItemT.ts";
 
 type ItemListProps = {
 	itemListKey?: string;
@@ -10,7 +13,7 @@ type ItemListProps = {
 
 export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 
-	const { allItems, userItems } = useItems();
+	const { allItems, userItems, updateItemOrder } = useItems();
 	const { user } = useAuth();
 	const [editingItem, setEditingItem] = useState<string | null>(null);
 	const allMode = useMemo(() => {return itemListKey === 'shared'}, [itemListKey]);
@@ -18,13 +21,23 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 		? allItems
 		: allItems.filter(item => userItems.has(item.id));
 
-	const totalCost = displayItems.reduce(
-		(total, curr) => {total += curr.price || 0; return total;}, 0);
+	const totalCost = 0;
 
+	useEffect(() => {
+		displayItems.reduce(
+			(total, curr) => {total += curr.price || 0; return total;}, 0);
+	}, [displayItems])
+
+
+	const handleReorder = (reorderedItems: ItemT[]) => {
+		const itemIds = reorderedItems.map(item => item.id);
+		void updateItemOrder(itemIds);
+	};
 
 	const onCreate = () => {
 		setEditingItem('new');
 	}
+
 
 	return (
 		<div className="space-y-4">
@@ -59,14 +72,24 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 					editMode={true}
 					setEditMode={(mode) => {!mode && setEditingItem(null)}}/>
 			}
-			{displayItems.map(item => (
-				<Item
-					key={item.id}
-					item={item}
-					editMode={editingItem === item.id}
-					setEditMode={(mode) => {setEditingItem(mode ? item.id : null);}}
-				/>
-			))}
+			<DraggableList
+				items={displayItems}
+				onReorder={handleReorder}
+				getItemId={(item) => item.id}
+				renderItem={(item) => (
+					<DraggableCard
+						key={item.id}
+						id={item.id}
+						disabled={editingItem === item.id}
+					>
+						<Item
+							item={item}
+							editMode={editingItem === item.id}
+							setEditMode={(mode) => { setEditingItem(mode ? item.id : null); }}
+						/>
+					</DraggableCard>
+				)}
+			/>
 		</div>
 	);
 }

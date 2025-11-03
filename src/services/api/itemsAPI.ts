@@ -13,7 +13,6 @@ export const itemsAPI = {
 			.order('created_at', {ascending: false});
 
 		if (error) throw error;
-		console.debug(data);
 		return data as ItemT[];
 	},
 

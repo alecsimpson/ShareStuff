@@ -7,6 +7,7 @@ import {ListT} from "../models/ListT.ts";
 type ItemsContextType = {
 	allItems: ItemT[];
 	userItems: Set<string>;
+	currentList: ListT | null;
 	addItemToUser: (itemId: string) => void;
 	removeItemFromUser: (itemId: string) => void;
 	isItemInUserList: (itemId: string) => boolean;
@@ -15,6 +16,7 @@ type ItemsContextType = {
 	loading: boolean;
 	refreshItems: () => Promise<void>;
 	createItem: (item: Omit<ItemT, 'id' | 'created_at'>) => Promise<void>;
+	updateItemOrder: (itemIds: string[]) => Promise<void>;
 };
 
 const ItemsContext = createContext<ItemsContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 
 	const [allItems, setAllItems] = useState<ItemT[]>([]);
 	const [userItems, setUserItems] = useState<Set<string>>(new Set());
+	const [currentList, setCurrentList] = useState<ListT | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -30,7 +33,7 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 	}, []);
 
 
-	const sortItems = (items: ItemT[], list: ListT): ItemT[] => {
+	const sortItemsByList = (items: ItemT[], list: ListT): ItemT[] => {
 		const itemsMap = new Map(items.map(item => [item.id, item]));
 		return list.items
 			.map(itemId => itemsMap.get(itemId))
@@ -51,12 +54,35 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 				})
 			}
 
-			setAllItems(sortItems(allItems, sharedList));
+			setCurrentList(sharedList);
+			setAllItems(sortItemsByList(allItems, sharedList));
 
 		} catch (e) {
 			console.error('Error fetching items:', e);
 		} finally {
 			setLoading(false);
+		}
+	};
+
+
+	const updateItemOrder = async (itemIds: string[]) => {
+		if (!currentList) return;
+
+		const itemsMap = new Map(allItems.map(item => [item.id, item]));
+		const reorderedItems = itemIds
+			.map(id => itemsMap.get(id))
+			.filter(item => item !== undefined) as ItemT[];
+
+		setAllItems(reorderedItems);
+
+		try {
+			await listsAPI.updateList({
+				...currentList,
+				items: itemIds,
+			});
+		} catch (e) {
+			console.error('Error updating list order:', e);
+			void refreshItems();
 		}
 	};
 
@@ -108,6 +134,8 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 			updateItem,
 			deleteItem,
 			refreshItems,
+			updateItemOrder,
+			currentList,
 		}}>
 			{children}
 		</ItemsContext.Provider>
