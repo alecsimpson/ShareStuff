@@ -34,7 +34,7 @@ export default function DraggableCard({id, children, disabled = false}: Draggabl
 		<div
 			ref={setNodeRef}
 			style={style}
-			className="flex items-stretch gap-2 sm:gap-3"
+			className="flex items-stretch gap-2 sm:gap-3 bg-white border rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow"
 		>
 			<div className="flex-1 min-w-0">
 				{children}
