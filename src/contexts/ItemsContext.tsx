@@ -33,13 +33,6 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 	}, []);
 
 
-	const sortItemsByList = (items: ItemT[], list: ListT): ItemT[] => {
-		const itemsMap = new Map(items.map(item => [item.id, item]));
-		return list.items
-			.map(itemId => itemsMap.get(itemId))
-			.filter(item => item !== undefined) as ItemT[];
-	}
-
 	const refreshItems = async () => {
 		try {
 			setLoading(true);
@@ -63,6 +56,32 @@ export function ItemsProvider({children}: { children: ReactNode }) {
 			setLoading(false);
 		}
 	};
+
+
+
+	const sortItemsByList = (items: ItemT[], list: ListT): ItemT[] => {
+		const itemsMap = new Map(items.map(item => [item.id, item]));
+
+		const notBoughtItems: string[] = [];
+		const boughtItems: string[] = [];
+
+		list.items.forEach(itemId => {
+			const item = itemsMap.get(itemId);
+			if (item) {
+				if (item.bought) {
+					boughtItems.push(itemId);
+				} else {
+					notBoughtItems.push(itemId);
+				}
+			}
+		})
+
+		const orderedIds = [...notBoughtItems, ...boughtItems];
+
+		return orderedIds
+			.map(itemId => itemsMap.get(itemId))
+			.filter(item => item !== undefined) as ItemT[];
+	}
 
 
 	const updateItemOrder = async (itemIds: string[]) => {

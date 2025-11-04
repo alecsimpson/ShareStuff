@@ -46,7 +46,7 @@ export default function Item({ item,  editMode = false, setEditMode = () => {}}:
 					</>
 				:
 					<>
-						<div className={`flex flex-row justify-between bg-white border rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-shadow ${item.urgent ? 'ring-1 ring-red-200' : ''} ${item.bought ? 'ring-1 ring-green-200' : ''}`}>
+						<div className={`flex flex-row justify-between`}>
 							<div className={`flex flex-col sm:flex-row items-start gap-3 sm:gap-4`}>
 								<p className="hidden sm:block text-xs text-gray-500">id:{item.id}</p>
 								{item.image_url && (

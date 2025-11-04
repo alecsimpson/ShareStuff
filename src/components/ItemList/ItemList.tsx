@@ -28,9 +28,28 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 			(total, curr) => {total += curr.price || 0; return total;}, 0);
 	}, [displayItems])
 
+	const notBoughtItems = useMemo(() =>
+			displayItems.filter(item => !item.bought),
+		[displayItems]
+	);
+
+	const boughtItems = useMemo(() =>
+			displayItems.filter(item => item.bought),
+		[displayItems]
+	);
+
 
 	const handleReorder = (reorderedItems: ItemT[]) => {
-		const itemIds = reorderedItems.map(item => item.id);
+		let allReorderedItems: ItemT[] = []
+
+		if(reorderedItems[0].bought) {
+			allReorderedItems = [...notBoughtItems, ...reorderedItems]
+		} else {
+			allReorderedItems = [...reorderedItems, ...boughtItems]
+		}
+
+
+		const itemIds = allReorderedItems.map(item => item.id);
 		void updateItemOrder(itemIds);
 	};
 
@@ -72,24 +91,55 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 					editMode={true}
 					setEditMode={(mode) => {!mode && setEditingItem(null)}}/>
 			}
-			<DraggableList
-				items={displayItems}
-				onReorder={handleReorder}
-				getItemId={(item) => item.id}
-				renderItem={(item) => (
-					<DraggableCard
-						key={item.id}
-						id={item.id}
-						disabled={editingItem === item.id}
-					>
-						<Item
-							item={item}
-							editMode={editingItem === item.id}
-							setEditMode={(mode) => { setEditingItem(mode ? item.id : null); }}
-						/>
-					</DraggableCard>
-				)}
-			/>
+			{/* Not Bought Items Section */}
+			<div className="space-y-3">
+				<h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
+					To Buy ({notBoughtItems.length})
+				</h2>
+				<DraggableList
+					items={notBoughtItems}
+					onReorder={handleReorder}
+					getItemId={(item) => item.id}
+					renderItem={(item) => (
+						<DraggableCard
+							key={item.id}
+							id={item.id}
+							disabled={editingItem === item.id}
+						>
+							<Item
+								item={item}
+								editMode={editingItem === item.id}
+								setEditMode={(mode) => { setEditingItem(mode ? item.id : null); }}
+							/>
+						</DraggableCard>
+					)}
+				/>
+			</div>
+
+			{/* Bought Items Section */}
+			<div className="space-y-3">
+				<h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
+					Bought ({boughtItems.length})
+				</h2>
+				<DraggableList
+					items={boughtItems}
+					onReorder={handleReorder}
+					getItemId={(item) => item.id}
+					renderItem={(item) => (
+						<DraggableCard
+							key={item.id}
+							id={item.id}
+							disabled={editingItem === item.id}
+						>
+							<Item
+								item={item}
+								editMode={editingItem === item.id}
+								setEditMode={(mode) => { setEditingItem(mode ? item.id : null); }}
+							/>
+						</DraggableCard>
+					)}
+				/>
+			</div>
 		</div>
 	);
 }

@@ -33,7 +33,7 @@ export default function DraggableList<T>(
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
-				distance: 8, // 8px of movement required to start drag
+				distance: 6, // 8px of movement required to start drag
 			},
 		}),
 		useSensor(KeyboardSensor, {
