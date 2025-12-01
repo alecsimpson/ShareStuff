@@ -135,7 +135,7 @@ export default function ChoreTable({
 							<select
 								value={selectedPersonId}
 								onChange={(e) => setSelectedPersonId(e.target.value)}
-								className="bg-gray-900 text-white font-semibold border border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+								className="bg-gray-900 text-white font-semibold px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
 							>
 								{people.map((person) => (
 									<option key={person.id} value={person.id}>
