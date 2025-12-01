@@ -1,10 +1,10 @@
-import {useItems} from '../../contexts/ItemsContext';
-import Item from "../Item/Item.tsx";
+import {useItems} from '../../../contexts/ItemsContext.tsx';
+import Item from "../Item.tsx";
 import {useEffect, useMemo, useState} from "react";
-import {useAuth} from "../../contexts/AuthContext.tsx";
-import DraggableList from "../shared/DraggableList.tsx";
-import DraggableCard from "../shared/DraggableCard.tsx";
-import {ItemT} from "../../models/ItemT.ts";
+import {useAuth} from "../../../contexts/AuthContext.tsx";
+import DraggableList from "../../shared/DraggableList.tsx";
+import DraggableCard from "../../shared/DraggableCard.tsx";
+import {ItemT} from "../../../models/ItemT.ts";
 
 type ItemListProps = {
 	itemListKey?: string;
@@ -40,7 +40,7 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 
 
 	const handleReorder = (reorderedItems: ItemT[]) => {
-		let allReorderedItems: ItemT[] = []
+		let allReorderedItems: ItemT[]
 
 		if(reorderedItems[0].bought) {
 			allReorderedItems = [...notBoughtItems, ...reorderedItems]
@@ -60,6 +60,7 @@ export default function ItemList({ itemListKey = 'shared' }: ItemListProps) {
 
 	return (
 		<div className="space-y-4">
+			<h1 className="text-2xl font-semibold tracking-tight">Groceries</h1>
 			<p className="text-sm sm:text-base">Total: ${totalCost}</p>
 			{
 				!editingItem && (

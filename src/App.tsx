@@ -6,8 +6,10 @@ import {Outlet} from "react-router";
 function App() {
   return (
     <>
-	    <NavBar/>
-	    <Outlet/>
+			<div className="bg-primary text-white min-h-screen">
+				<NavBar/>
+				<Outlet/>
+			</div>
     </>
   );
 }

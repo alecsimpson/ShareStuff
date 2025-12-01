@@ -10,6 +10,7 @@ import User from "./components/User/User.tsx";
 import Login from "./components/Login/Login.tsx";
 import {ProtectedRoute} from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import {AuthProvider} from "./contexts/AuthContext.tsx";
+import Chore from "./components/Chores/Chore.tsx";
 
 const routes = createBrowserRouter([
 	{
@@ -34,6 +35,12 @@ const routes = createBrowserRouter([
 					</ProtectedRoute>
 				),
 			},
+			{
+				path: "chores",
+				element: (
+					<Chore></Chore>
+				)
+			}
 		]
 	}
 ], {basename: import.meta.env.BASE_URL});

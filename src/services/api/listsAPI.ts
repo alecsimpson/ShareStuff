@@ -1,7 +1,7 @@
 import {getSupabase} from "../supabaseClient.ts";
 import {ListT} from "../../models/ListT.ts";
 
-function requireSupabase() {
+function getSupabase() {
 	const supabase = getSupabase();
 	if (!supabase) throw new Error('Supabase not initialized');
 	return supabase;
@@ -11,7 +11,7 @@ function requireSupabase() {
 export const listsAPI = {
 
 	async create(list: Omit<ListT, 'id' | 'created_at'>): Promise<ListT> {
-		const supabase = requireSupabase()
+		const supabase = getSupabase()
 
 		const { data, error } = await supabase
 			.from("lists")
@@ -24,7 +24,7 @@ export const listsAPI = {
 	},
 
 	async getListById(id: string): Promise<ListT> {
-		const supabase = requireSupabase()
+		const supabase = getSupabase()
 
 		const { data, error } = await supabase
 			.from('lists')
@@ -37,7 +37,7 @@ export const listsAPI = {
 	},
 
 	async updateList(list: ListT): Promise<ListT> {
-		const supabase = requireSupabase()
+		const supabase = getSupabase()
 
 		const { data, error } = await supabase
 			.from('lists')
@@ -51,7 +51,7 @@ export const listsAPI = {
 	},
 
 	async getHomePageList(): Promise<ListT> {
-		const supabase = requireSupabase()
+		const supabase = getSupabase()
 
 		const { data, error } = await supabase
 			.from('lists')

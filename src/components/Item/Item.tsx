@@ -28,7 +28,7 @@ export default function Item({ item,  editMode = false, setEditMode = () => {}}:
 		} else {
 			updateItem(item)
 		}
-		setEditMode(false);
+		setEditMode(false); 
 	}
 
 
