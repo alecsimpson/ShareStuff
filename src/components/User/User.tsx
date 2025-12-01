@@ -1,4 +1,4 @@
-import ItemList from "../ItemList/ItemList.tsx";
+import ItemList from "../Item/ItemList/ItemList.tsx";
 
 
 export default function User() {
