@@ -44,7 +44,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 					<input
 						value={name}
 						onChange={(e) => setName(e.target.value)}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						required
 					/>
 				</div>
@@ -54,7 +54,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 						type="number"
 						value={amount ?? ''}
 						onChange={(e) => setAmount(e.target.value === '' ? undefined : Number(e.target.value))}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						min={0}
 						step={1}
 					/>
@@ -65,7 +65,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 						type="number"
 						value={price ?? ''}
 						onChange={(e) => setPrice(e.target.value === '' ? undefined : Number(e.target.value))}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						min={0}
 						step="0.01"
 					/>
@@ -76,7 +76,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 						type="url"
 						value={link}
 						onChange={(e) => setLink(e.target.value)}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						placeholder="https://..."
 					/>
 				</div>
@@ -85,7 +85,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 					<input
 						value={image}
 						onChange={(e) => setImage(e.target.value)}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						placeholder="https://..."
 					/>
 				</div>
@@ -94,7 +94,7 @@ export default function ItemForm({item, onCancel, onSave, onDelete}: ItemFormPro
 					<textarea
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+						className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-black"
 						rows={3}
 					/>
 				</div>
